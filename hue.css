@@ -1,3 +1,22 @@
+html, body {
+    height: 100%;
+}
+
 label.form-group {
     display: block;
+}
+
+
+#loading {
+    text-align: center;
+    font-size: 18pt;
+}
+
+.glyphicon-refresh-animate {
+    animation: spin .7s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
 }

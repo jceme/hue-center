@@ -1,7 +1,10 @@
 Hue = (function() {
 
-    let bridgeAddress = localStorage.getItem('hue.address');
-    let user = localStorage.getItem('hue.user');
+    const STORAGE_ADDRESS = 'hue.address';
+    const STORAGE_USER = 'hue.user';
+
+    let bridgeAddress = localStorage.getItem(STORAGE_ADDRESS);
+    let user = localStorage.getItem(STORAGE_USER);
 
 
     function sendRequest(method, address, path, body) {
@@ -54,13 +57,36 @@ Hue = (function() {
     }
 
 
+    class HueInfo {
+        constructor(info) {
+            this.info = info;
+        }
+
+        getRoomByType(roomType) {
+            const group = Object.values(this.info.groups).find(group => group.type === 'Room' && group.class === roomType);
+            return group ? {
+                get name() { return group.name; }
+            } : null;
+        }
+    }
+
+
     return {
+
+        Room: {
+            Kitchen: 'Kitchen',
+            Bathroom: 'Bathroom',
+            Office: 'Office',
+            Hallway: 'Hallway',
+            Bedroom: 'Bedroom',
+            LivingRoom: 'Living room'
+        },
 
         get fullInfo() {
             return get('')
                 .then(response => {
                     if (response && response.config && response.config.apiversion) {
-                        return Promise.resolve(response);
+                        return Promise.resolve(new HueInfo(response));
                     }
 
                     return rejectInvalidResponse(response);
@@ -68,10 +94,8 @@ Hue = (function() {
         },
 
         accessWith(address, userId) {
-            localStorage.setItem('hue.address', address);
-            bridgeAddress = address;
-            localStorage.setItem('hue.user', userId);
-            user = userId;
+            localStorage.setItem(STORAGE_ADDRESS, bridgeAddress = address);
+            localStorage.setItem(STORAGE_USER, user = userId);
 
             console.log(`Accessing Hue at ${bridgeAddress} with user ${user}`);
             return Utils.noop;

@@ -1,4 +1,11 @@
-(function() {
+(function () {
+
+    const ROOM_LAYOUT = [
+        [Hue.Room.Kitchen, Hue.Room.Bathroom, Hue.Room.Office],
+        [Hue.Room.Hallway],
+        [Hue.Room.Bedroom, Hue.Room.LivingRoom]
+    ];
+
 
     function login() {
         const dialog = Site.loginDialog;
@@ -17,8 +24,6 @@
             return dialog.show()
                 .then(() => dialog.waitForLoginData())
                 .then(() => {
-                    // TODO wait dialog
-
                     if (dialog.createNew) {
                         return Hue.createUser(dialog.bridgeAddress, dialog.userIdentification);
                     }
@@ -33,9 +38,21 @@
 
 
     login()
-        .then(fullInfo => {
-            console.log('Logged in');
-            Site.debug(JSON.stringify(fullInfo, null, 4));
+        .then(hueInfo => {
+            console.log('Logged in. Received Hue information:', hueInfo);
+
+            const rooms = ROOM_LAYOUT
+                .map(row =>
+                    row
+                        .map(roomType => hueInfo.getRoomByType(roomType))
+                        .filter(room => room))
+                .filter(row => row.length);
+
+            Site.createRooms(rooms, (room, roomSite) => {
+                roomSite.title = room.name;
+            });
+
+            Site.showLoadingAnimation = false;
         })
         .catch(error => {
             console.error('App error:', error);

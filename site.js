@@ -1,4 +1,4 @@
-Site = (function() {
+Site = (function () {
 
     return {
 
@@ -11,7 +11,7 @@ Site = (function() {
                 submitButton.prop('disabled', !canLogin);
             }
 
-            loginDialog.find('.form-control').each(function() {
+            loginDialog.find('.form-control').each(function () {
                 const input = $(this);
 
                 input.on('keyup', Utils.debounce(300, () => {
@@ -83,8 +83,29 @@ Site = (function() {
             };
         },
 
-        debug(msg) {
-            $('#debug').text(msg || '');
+        set showLoadingAnimation(enabled) {
+            $('#loading').toggleClass('hidden', !enabled);
+        },
+
+        createRooms(layout, creator) {
+            const roomsContainer = $('#rooms');
+            layout.forEach(row => {
+                const roomsRow = $('<div class="row">');
+                roomsContainer.append(roomsRow);
+                const colSize = Math.floor(12 / row.length);
+                row.forEach(roomInfo => {
+                    const roomDiv = $('<div><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"></h3></div><div class="panel-body"></div></div></div>'),
+                        body = roomDiv.find('.panel-body');
+                    roomsRow.append(roomDiv);
+                    roomDiv.addClass(`col-md-${colSize}`);
+
+                    creator(roomInfo, {
+                        set title(title) {
+                            roomDiv.find('h3.panel-title').text(title || '');
+                        }
+                    });
+                });
+            });
         },
 
     };

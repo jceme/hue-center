@@ -30,7 +30,11 @@
     </div>
 </nav>
 
-<div id="debug" style="white-space: pre"></div>
+<div id="rooms" class="container-fluid"></div>
+
+<div id="loading">
+    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+</div>
 
 
 <div id="login-dialog" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -47,19 +51,23 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                                <a role="button" data-toggle="collapse" data-parent="#login-dialog-accordion" href="#login-dialog-accordion-new">
+                                <a role="button" data-toggle="collapse" data-parent="#login-dialog-accordion"
+                                   href="#login-dialog-accordion-new">
                                     Neuen Benutzer erstellen
                                 </a>
                             </h4>
                         </div>
                         <div id="login-dialog-accordion-new" class="panel-collapse collapse in" role="tabpanel">
                             <div class="panel-body">
-                                <label class="form-group">Hue Bridge
-                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*$" class="form-control" placeholder="IP-Adresse oder Hostname der Hue Bridge"/>
+                                <label class="form-group">Adresse der Hue-Bridge
+                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*$"
+                                           class="form-control" placeholder="IP-Adresse oder Hostname der Hue Bridge"/>
                                 </label>
 
                                 <label class="form-group">Kennung
-                                    <input type="text" name="user-identification" required class="form-control" value="hue_app#webapp" placeholder="Identifikation des Benutzers gegenüber der Hue Bridge"/>
+                                    <input type="text" name="user-identification" required class="form-control"
+                                           value="hue_app#webapp"
+                                           placeholder="Identifikation des Benutzers gegenüber der Hue Bridge"/>
                                 </label>
                             </div>
                         </div>
@@ -67,19 +75,22 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#login-dialog-accordion" href="#login-dialog-accordion-existent">
+                                <a class="collapsed" role="button" data-toggle="collapse"
+                                   data-parent="#login-dialog-accordion" href="#login-dialog-accordion-existent">
                                     Bestehenden Benutzer verwenden
                                 </a>
                             </h4>
                         </div>
                         <div id="login-dialog-accordion-existent" class="panel-collapse collapse" role="tabpanel">
                             <div class="panel-body">
-                                <label class="form-group">Hue Bridge
-                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*$" class="form-control" placeholder="IP-Adresse oder Hostname der Hue Bridge"/>
+                                <label class="form-group">Adresse der Hue-Bridge
+                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*$"
+                                           class="form-control" placeholder="IP-Adresse oder Hostname der Hue Bridge"/>
                                 </label>
 
                                 <label class="form-group">User-ID
-                                    <input type="text" name="user-id" required class="form-control" placeholder="User-ID des existierenden Benutzers"/>
+                                    <input type="text" name="user-id" required class="form-control"
+                                           placeholder="User-ID des existierenden Benutzers"/>
                                 </label>
                             </div>
                         </div>

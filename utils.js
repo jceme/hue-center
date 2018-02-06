@@ -6,6 +6,17 @@ Utils = (function() {
             return Promise.resolve();
         },
 
+        reject(description, error) {
+            return Promise.reject(this.createReject(description, error));
+        },
+
+        createReject(description, error) {
+            return {
+                description,
+                error
+            };
+        },
+
         debounce(delay, callback) {
             let timer = null;
 
@@ -18,7 +29,7 @@ Utils = (function() {
                     callback.apply(this, arguments);
                 }, delay);
             };
-        }
+        },
 
     };
 })();

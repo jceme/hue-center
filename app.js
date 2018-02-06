@@ -5,11 +5,14 @@
 
         function testAccess() {
             return Hue.fullInfo
-                .catch(enterLoginData)
+                .catch(enterLoginData);
         }
 
         function enterLoginData(error) {
-            dialog.error = error;
+            if (error) {
+                console.warn('Login failed:', error);
+                dialog.error = error && error.description || error;
+            }
 
             return dialog.show()
                 .then(() => dialog.waitForLoginData())

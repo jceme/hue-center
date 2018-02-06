@@ -7,7 +7,7 @@ Hue = (function() {
     function sendRequest(method, address, path, body) {
         return new Promise((resolve, reject) => {
             if (address == null) {
-                return reject('No Hue address available');
+                return reject(Utils.createReject('No Hue address available'));
             }
 
             const url = `http://${address}/api${path}`;
@@ -24,7 +24,7 @@ Hue = (function() {
             };
             request.onerror = () => {
                 console.log('Request error');
-                reject(`Request failed: ${url}`);
+                reject(Utils.createReject(`Request failed: ${url}`));
             };
 
             if (body == null) {
@@ -50,7 +50,7 @@ Hue = (function() {
     function rejectInvalidResponse(response) {
         const desc = r => r && r.error && r.error.description;
         const error = desc(response) || desc(response[0]);
-        return Promise.reject(response ? `Hue request failed: ${error} (${JSON.stringify(response)})` : 'Hue request failed');
+        return Utils.reject(error ? `Hue request failed: ${error}` : 'Hue request failed',  JSON.stringify(response));
     }
 
 
@@ -90,7 +90,7 @@ Hue = (function() {
                 }
 
                 return rejectInvalidResponse(response);
-            })
+            });
         },
 
     };

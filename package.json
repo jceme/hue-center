@@ -1,0 +1,14 @@
+{
+  "name": "hue-center",
+  "version": "1.0.0",
+  "description": "Hue Center",
+  "main": "hue-mock.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ME",
+  "dependencies": {
+    "express": "^4.16.2",
+    "randomstring": "^1.1.5"
+  }
+}

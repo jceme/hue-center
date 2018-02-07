@@ -63,7 +63,7 @@
                         <div id="login-dialog-accordion-new" class="panel-collapse collapse in" role="tabpanel">
                             <div class="panel-body">
                                 <label class="form-group">Adresse der Hue-Bridge
-                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*$"
+                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*(:\d+)?$"
                                            class="form-control" placeholder="IP-Adresse oder Hostname der Hue Bridge"/>
                                 </label>
 
@@ -87,7 +87,7 @@
                         <div id="login-dialog-accordion-existent" class="panel-collapse collapse" role="tabpanel">
                             <div class="panel-body">
                                 <label class="form-group">Adresse der Hue-Bridge
-                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*$"
+                                    <input type="text" name="bridge-address" required pattern="^\w+(\.\w+)*(:\d+)?$"
                                            class="form-control" placeholder="IP-Adresse oder Hostname der Hue Bridge"/>
                                 </label>
 

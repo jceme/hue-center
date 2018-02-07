@@ -16,6 +16,7 @@ router.param('username', (req, res, next, username) => {
     if (username in users) {
         next();
     } else {
+        console.warn(`Cannot find user ${username}`);
         error_unauthorized(req, res, next);
     }
 });
@@ -34,7 +35,7 @@ function error_unauthorized(req, res) {
     res.json([{
         error: {
             type: 1,
-            address: req.path,
+            address: req.originalPath,
             description: "unauthorized user"
         }
     }]);
@@ -96,7 +97,16 @@ function register_user(req, res, next) {
 
 
 app.use(express.json());
-app.use('/api', router);
+app.use((req, res, next) => {
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE, HEAD');
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Max-Age', '3600');
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+    res.set('Pragma', 'no-cache');
+    next();
+});
 app.use('/api', router);
 
 app.listen(8080, () => {

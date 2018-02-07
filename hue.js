@@ -17,7 +17,8 @@ Hue = (function () {
             console.log(`Requesting ${url} with method ${method} with data`, body);
 
             const request = new XMLHttpRequest();
-            request.open(method, url);
+            request.open(method, url, true);
+            request.setRequestHeader('Content-Type', 'application/json');
             request.responseType = 'json';
             request.timeout = 30000;
 

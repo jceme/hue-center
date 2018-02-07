@@ -1,4 +1,4 @@
-Hue = (function() {
+Hue = (function () {
 
     const STORAGE_ADDRESS = 'hue.address';
     const STORAGE_USER = 'hue.user';
@@ -53,7 +53,7 @@ Hue = (function() {
     function rejectInvalidResponse(response) {
         const desc = r => r && r.error && r.error.description;
         const error = desc(response) || desc(response[0]);
-        return Utils.reject(error ? `Hue request failed: ${error}` : 'Hue request failed',  JSON.stringify(response));
+        return Utils.reject(error ? `Hue request failed: ${error}` : 'Hue request failed', JSON.stringify(response));
     }
 
 
@@ -63,9 +63,23 @@ Hue = (function() {
         }
 
         getRoomByType(roomType) {
-            const group = Object.values(this.info.groups).find(group => group.type === 'Room' && group.class === roomType);
-            return group ? {
-                get name() { return group.name; }
+            for (const groupId in this.info.groups) {
+                const group = this.info.groups[groupId];
+                if (group.type === 'Room' && group.class === roomType) {
+                    return {
+                        id: groupId,
+                        name: group.name || roomType,
+                        lights: group.lights || [],
+                    };
+                }
+            }
+            return null;
+        }
+
+        getLightById(lightId) {
+            const light = this.info.lights[lightId];
+            return light ? {
+                id: lightId,
             } : null;
         }
     }

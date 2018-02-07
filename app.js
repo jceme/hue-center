@@ -49,7 +49,17 @@
                 .filter(row => row.length);
 
             Site.createRooms(rooms, (room, roomSite) => {
+                console.log('Creating room', room);
                 roomSite.title = room.name;
+
+                if (room.lights.length) {
+                    room.lights.forEach(lightId => {
+                        const light = hueInfo.getLightById(lightId);
+                        const lightSite = roomSite.addLight();
+                    });
+                } else {
+                    roomSite.withoutLights = true;
+                }
             });
 
             Site.showLoadingAnimation = false;

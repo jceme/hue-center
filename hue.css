@@ -20,3 +20,12 @@ label.form-group {
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
+
+
+.hue-light {
+    font-size: 30pt;
+}
+
+.hue-light.unreachable {
+    color: lightgray;
+}

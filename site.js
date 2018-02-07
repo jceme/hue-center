@@ -102,7 +102,19 @@ Site = (function () {
                     creator(roomInfo, {
                         set title(title) {
                             roomDiv.find('h3.panel-title').text(title || '');
-                        }
+                        },
+
+                        set withoutLights(enabled) {
+                            // TODO
+                        },
+
+                        addLight() {
+                            const light = $('#lightbulb').clone().removeClass('hidden');
+                            body.append(light);
+                            return {
+
+                            };
+                        },
                     });
                 });
             });

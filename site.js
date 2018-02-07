@@ -94,7 +94,7 @@ Site = (function () {
                 roomsContainer.append(roomsRow);
                 const colSize = Math.floor(12 / row.length);
                 row.forEach(roomInfo => {
-                    const roomDiv = $('<div><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"></h3></div><div class="panel-body"></div></div></div>'),
+                    const roomDiv = Utils.template('#roomPanel'),
                         body = roomDiv.find('.panel-body');
                     roomsRow.append(roomDiv);
                     roomDiv.addClass(`col-md-${colSize}`);
@@ -109,7 +109,7 @@ Site = (function () {
                         },
 
                         addLight() {
-                            const light = $('#lightbulb').clone().removeClass('hidden');
+                            const light = Utils.template('#lightbulb');
                             body.append(light);
                             return {
 

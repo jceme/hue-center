@@ -31,5 +31,9 @@ Utils = (function() {
             };
         },
 
+        template(selector) {
+            return $($(selector).prop('content')).children().clone();
+        }
+
     };
 })();

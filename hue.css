@@ -23,9 +23,12 @@ label.form-group {
 
 
 .hue-light {
-    font-size: 30pt;
 }
 
 .hue-light.unreachable {
-    color: lightgray;
+}
+
+.room-body {
+    display: flex;
+    justify-content: space-evenly;
 }

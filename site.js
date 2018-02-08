@@ -104,15 +104,21 @@ Site = (function () {
                             roomDiv.find('h3.panel-title').text(title || '');
                         },
 
-                        set withoutLights(enabled) {
-                            // TODO
-                        },
-
                         addLight() {
                             const light = Utils.template('#lightbulb');
                             body.append(light);
                             return {
+                                set hint(hint) {
+                                    light.attr('title', hint || '');
+                                },
 
+                                setRGBColor(r, g, b) {
+                                    light.find('.bulb').css('fill', `rgb(${r}, ${g}, ${b})`);
+                                },
+
+                                setHslColor(h, s, l) {
+                                    light.find('.bulb').css('fill', `hsl(${h}, ${s}%, ${l}%)`);
+                                },
                             };
                         },
                     });

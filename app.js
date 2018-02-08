@@ -52,19 +52,19 @@
                 console.log('Creating room', room);
                 roomSite.title = room.name;
 
-                if (room.lights.length) {
-                    room.lights.forEach(lightId => {
-                        const light = hueInfo.getLightById(lightId);
-                        const lightSite = roomSite.addLight();
-                    });
-                } else {
-                    roomSite.withoutLights = true;
-                }
+                room.lights.forEach(lightId => {
+                    const light = hueInfo.getLightById(lightId);
+                    const lightSite = roomSite.addLight();
+
+                    lightSite.hint = JSON.stringify(light);
+                    lightSite.setRGBColor(light.color.r, light.color.g, light.color.b);
+                });
             });
 
             Site.showLoadingAnimation = false;
         })
         .catch(error => {
+            alert('Es ist ein Fehler aufgetreten');
             console.error('App error:', error);
         });
 

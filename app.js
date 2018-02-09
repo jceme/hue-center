@@ -58,6 +58,7 @@
 
                     lightSite.hint = JSON.stringify(light);
                     lightSite.setRGBColor(light.color.r, light.color.g, light.color.b);
+                    console.log('Found light for room:', light);
                 });
             });
 

@@ -1,4 +1,4 @@
-Utils = (function() {
+Utils = (function () {
 
     return {
 
@@ -20,7 +20,7 @@ Utils = (function() {
         debounce(delay, callback) {
             let timer = null;
 
-            return function() {
+            return function () {
                 if (timer != null) {
                     clearTimeout(timer);
                 }
@@ -33,7 +33,27 @@ Utils = (function() {
 
         template(selector) {
             return $($(selector).prop('content')).children().clone();
-        }
+        },
+
+        cachedResult(target, initializers) {
+            Object.entries(initializers).forEach(([propertyName, initializer]) => {
+                Object.defineProperty(target, propertyName, {
+                    enumerable: true,
+                    configurable: true,
+                    get() {
+                        const result = initializer();
+                        Object.defineProperty(target, propertyName, {
+                            enumerable: true,
+                            configurable: true,
+                            value: result,
+                            writable: true,
+                        });
+                        return result;
+                    }
+                });
+            });
+            return target;
+        },
 
     };
 })();

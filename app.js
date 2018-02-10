@@ -10,6 +10,8 @@
     function login() {
         const dialog = Site.loginDialog;
 
+        dialog.bridgeAddressProvider = () => Hue.discoverBridge();
+
         function testAccess() {
             return Hue.fullInfo
                 .catch(enterLoginData);

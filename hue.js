@@ -1,5 +1,7 @@
 Hue = (function () {
 
+    const HUE_BRIDGE_DISCOVERY_URL = 'https://www.meethue.com/api/nupnp';
+
     const STORAGE_ADDRESS = 'hue.address';
     const STORAGE_USER = 'hue.user';
 
@@ -7,18 +9,15 @@ Hue = (function () {
     let user = localStorage.getItem(STORAGE_USER);
 
 
-    function sendRequest(method, address, path, body) {
+    function sendRequest(method, url, body) {
         return new Promise((resolve, reject) => {
-            if (address == null) {
-                return reject(Utils.createReject('No Hue address available'));
-            }
-
-            const url = `http://${address}/api${path}`;
-            console.log(`Requesting ${url} with method ${method} with data`, body);
+            console.log(`Requesting ${url} with method ${method} and data`, body);
 
             const request = new XMLHttpRequest();
             request.open(method, url, true);
-            request.setRequestHeader('Content-Type', 'application/json');
+            if (body != null) {
+                request.setRequestHeader('Content-Type', 'application/json');
+            }
             request.responseType = 'json';
             request.timeout = 30000;
 
@@ -39,16 +38,24 @@ Hue = (function () {
         });
     }
 
+    function sendApiRequest(method, address, path, body) {
+        if (address == null) {
+            return Utils.reject('No Hue address available');
+        }
+
+        return sendRequest(method, `http://${address}/api${path}`, body);
+    }
+
     function get(path) {
-        return sendRequest('GET', bridgeAddress, `/${user}/${path}`);
+        return sendApiRequest('GET', bridgeAddress, `/${user}/${path}`);
     }
 
     function post(path, data) {
-        return sendRequest('POST', bridgeAddress, `/${user}/${path}`, data);
+        return sendApiRequest('POST', bridgeAddress, `/${user}/${path}`, data);
     }
 
     function put(path, data) {
-        return sendRequest('PUT', bridgeAddress, `/${user}/${path}`, data);
+        return sendApiRequest('PUT', bridgeAddress, `/${user}/${path}`, data);
     }
 
     function rejectInvalidResponse(response) {
@@ -114,6 +121,19 @@ Hue = (function () {
                 });
         },
 
+        discoverBridge() {
+            return sendRequest('GET', HUE_BRIDGE_DISCOVERY_URL)
+                .then(result => {
+                    const response = result[0];
+                    if (response && response.internalipaddress) {
+                        console.log('Created user:', response.internalipaddress);
+                        return response.internalipaddress;
+                    }
+
+                    return rejectInvalidResponse(response);
+                });
+        },
+
         accessWith(address, userId) {
             localStorage.setItem(STORAGE_ADDRESS, bridgeAddress = address);
             localStorage.setItem(STORAGE_USER, user = userId);
@@ -123,11 +143,10 @@ Hue = (function () {
         },
 
         createUser(address, identification) {
-            return sendRequest('POST', address, '', {
+            return sendApiRequest('POST', address, '', {
                 devicetype: identification
 
             }).then(result => {
-                console.log('Response', result);
                 const response = result[0];
                 if (response && response.success && response.success.username) {
                     console.log('Created user:', response.success.username);

@@ -1,5 +1,19 @@
 Site = (function () {
 
+    let bridgeAddress = null;
+    let findBridgeAddress = (bridgeAddressProvider) => {
+        if (!bridgeAddressProvider) {
+            return Utils.noop;
+        }
+
+        findBridgeAddress = Utils.noop;
+
+        return bridgeAddressProvider()
+            .then(address => {
+                bridgeAddress = address;
+            }, () => Utils.noop);
+    };
+
     return {
 
         get loginDialog() {
@@ -14,7 +28,7 @@ Site = (function () {
             loginDialog.find('.form-control').each(function () {
                 const input = $(this);
 
-                input.on('keyup', Utils.debounce(300, () => {
+                input.on('keyup change', Utils.debounce(300, () => {
                     const invalid = input.is(':invalid');
                     const grp = input.closest('.form-group');
                     grp.toggleClass('has-success', !invalid);
@@ -36,6 +50,8 @@ Site = (function () {
 
             return {
 
+                bridgeAddressProvider: null,
+
                 get createNew() {
                     return /\bnew$/.test(loginDialog.find('.collapse.in').attr('id'));
                 },
@@ -48,19 +64,29 @@ Site = (function () {
                     return loginDialog.find('.collapse.in').find('[name=bridge-address]').val();
                 },
 
+                set bridgeAddress(address) {
+                    return loginDialog.find('.collapse').find('[name=bridge-address]').val(address || '');
+                },
+
                 get userIdentification() {
                     return loginDialog.find('.collapse.in').find('[name=user-identification]').val();
                 },
 
                 show() {
-                    return new Promise(resolve => {
-                        checkCanLogin();
-                        loginDialog.one('shown.bs.modal', () => {
-                            resolve(this);
-                        });
+                    return findBridgeAddress(this.bridgeAddressProvider)
+                        .then(() => {
+                            if (bridgeAddress != null) {
+                                this.bridgeAddress = bridgeAddress;
+                            }
+                            checkCanLogin();
+                        })
+                        .then(() => new Promise(resolve => {
+                            loginDialog.one('shown.bs.modal', () => {
+                                resolve(this);
+                            });
 
-                        loginDialog.modal('show');
-                    });
+                            loginDialog.modal('show');
+                        }));
                 },
 
                 set error(msg) {
